@@ -61,3 +61,4 @@ cd ../TestCases/turbulence/flat_plate
 mpirun -np 4 ../../build/bin/SU2_CFD turb_flatplate.cfg
 ```
 
+![Screenshot 2025-03-15 at 1 55 43 PM](https://github.com/user-attachments/assets/6f2a28e4-1962-42da-b78d-e7243784459f)
