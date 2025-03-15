@@ -65,3 +65,5 @@ This repository documents the setup and execution of SU2 regression tests to ver
 ---
 
 This `README.md` is concise and clearly documents your work. You can place it in the root of your SU2 directory or in a separate folder for documentation. Let me know if you need further adjustments! 😊
+
+![Screenshot 2025-03-15 at 3 01 10 PM](https://github.com/user-attachments/assets/28beaa54-10b7-490c-acd4-d2979e56423e)
