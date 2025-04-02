@@ -42,3 +42,6 @@ Shock properties like angle, pressure/temperature jumps, and Mach number reducti
 Visualizations: Shock structure, Mach contours, and pressure gradients in ParaView.
 
 ![Screenshot 2025-03-15 at 2 23 35 PM](https://github.com/user-attachments/assets/a7335630-bd62-40ad-bae6-7c0e49a10bf2)
+
+![Screenshot 2025-04-02 at 10 15 03 AM](https://github.com/user-attachments/assets/4fcebca2-07e1-49c4-9d11-81aa84032ad2)
+
