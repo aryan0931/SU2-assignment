@@ -3,42 +3,43 @@
 
 Suppose the original Python wrapper simply reads a constant wall temperature from the configuration. We modify it so that a user can supply a spatial function. For example:
 
-### **Before Correction (Original Setup)**
-```python
-# Original snippet from setup.py (simplified)
-def setup_boundary_conditions(config):
-    # For each wall boundary, use the constant wall temperature
-    for boundary in config['boundaries']:
-        if boundary['type'] == 'wall':
-            # Use constant temperature from the config
-            boundary['temperature'] = config.get('WALL_TEMPERATURE', 300)
 ```
+import pysu2
+from math import sin, pi
+from mpi4py import MPI
 
-### **After Correction (Spatially Varying Wall Temperature)**
-```python
-import math
+def main():
+    comm = MPI.COMM_WORLD
 
-def wall_temperature_profile(x, y, z):
-    """
-    Example spatial function for wall temperature.
-    Modify this function based on physical requirements.
-    For instance, temperature could vary linearly with x.
-    """
-    # Base temperature plus an increase proportional to x.
-    base_temp = 300  # Kelvin
-    gradient = 10    # Kelvin per unit length
-    return base_temp + gradient * x
+    # Initialize SU2 driver
+    try:
+        SU2Driver = pysu2.CSinglezoneDriver('turb_SA_flatplate.cfg', 1, comm)
+    except TypeError as exception:
+        print('A TypeError occurred in pysu2.CDriver:', exception)
+        raise
 
-def setup_boundary_conditions(config):
-    # For each wall boundary, assign a spatially varying temperature.
-    for boundary in config['boundaries']:
-        if boundary['type'] == 'wall':
-            # Assume each boundary has a representative location (x, y, z).
-            x = boundary.get('x', 0)
-            y = boundary.get('y', 0)
-            z = boundary.get('z', 0)
-            # Use the spatial function to compute the temperature.
-            boundary['temperature'] = wall_temperature_profile(x, y, z)
+    # Get the marker ID for 'wall'
+    AllMarkerIDs = SU2Driver.GetMarkerIndices()
+    MarkerName = 'wall'
+    MarkerID = AllMarkerIDs.get(MarkerName, -1)
+
+    if MarkerID >= 0:
+        # Get number of vertices and marker coordinates
+        nVertex = SU2Driver.GetNumberMarkerNodes(MarkerID)
+        marker_coords = SU2Driver.MarkerCoordinates(MarkerID)
+
+        # Apply spatially varying wall temperature
+        for i_vertex in range(nVertex):
+            x = marker_coords[i_vertex][0]  # ✅ Fixed indexing
+            WallTemp = 560.0 - 260.0 * sin(x * pi / 4)
+            SU2Driver.SetMarkerCustomTemperature(MarkerID, i_vertex, WallTemp)
+
+    # Run the solver
+    SU2Driver.StartSolver()
+    SU2Driver.Finalize()
+
+if __name__ == '__main__':
+    main()
 ```
 
 *Notes:*
