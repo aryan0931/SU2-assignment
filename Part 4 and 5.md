@@ -52,9 +52,6 @@ if __name__ == '__main__':
 
 In the SU2 C++ code, assume that the output routines for volume data (used for Paraview visualization) need to include the local speed of sound. The speed of sound is typically computed as:
 
-\[
-a = \sqrt{\gamma \, R \, T}
-\]
 
 Where:
 - \( \gamma \) is the heat capacity ratio,
